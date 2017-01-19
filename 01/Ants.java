@@ -28,34 +28,20 @@ class Ants {
     private int antSteps; //ant will take a certain sequence of steps
 
     /**
-     * First hashmap for Point & State(s). Char for white/black tiles (states)
+     * Hashmap for Point & State(s). Char for white/black tiles (states)
      *
      * |-----------|----------|
-     * |  Point    |  State   |
+     * |  State    |  Point   |
      * |-----------|----------|
-     * |  0,0      |    w     |
-     * |-----------|----------|
-     */
-    static HashMap<Point, Character> locationStateMap = new HashMap<Point, Character>();
-
-    /**
-     * Second hashmap for Point & State(s). Char for white/black tiles (states)
-     *
-     * |-----------|----------|
-     * |   Key     |  Value   |
-     * |-----------|----------|
-     * |           |          |
+     * |    .      |  0,0     |
      * |-----------|----------|
      */
-    //TODO: rename and check second hashmap
-    static HashMap<Point, Character> somethingElse = new HashMap<>();
-
+    static HashMap<Character, Point> locationStateMap = new HashMap<Character, Point>();
 
     public static void main(String[] args) {
-
-        Point antJoe = new Point();
-        char storeState = 'w'; //TODO: get and store state from user input
-        locationStateMap.put(new Point(1, 1), storeState);
+        char storeState = 'w'; //Key: State
+        Point antJoe = new Point(); //Value: position
+        locationStateMap.put(storeState, new Point(1, 1));
 
         //TODO: while loop, hasNext() blablabla
         System.out.println("The story of your average Ant Joe :)");
@@ -66,15 +52,14 @@ class Ants {
         antJoe.y = userInputScanner.nextInt();
         System.out.println("Enter the initial character state: ");
         storeState = userInputScanner.next().charAt(0); //FIXME: accept a blank space, don't accept number as state?
-        locationStateMap.put(antJoe, storeState);
+        locationStateMap.put(storeState, antJoe);
         //TODO: check toString method from Point class for formatting
         System.out.println("Ant Joe is located at: " + "[" + antJoe.x + "," + antJoe.y + "]" + " and his state is: "
-                           + locationStateMap.get(antJoe) + "\n");
-
+                           + locationStateMap.get(storeState) + "\n");
 
         //Iterate over all of the keys:
         System.out.println("Iterate keys:");
-        for (Point key : locationStateMap.keySet()) {
+        for (Character key : locationStateMap.keySet()) {
             System.out.println(key);
         }
 
