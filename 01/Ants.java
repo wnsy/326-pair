@@ -112,7 +112,9 @@ class Ants {
         System.out.println("State: " + pointState);
         outState = stateChange.get(pointState)[incomingDirection]; //determine state change based on incoming
         locationStateMap.remove(currentPoint);
-        locationStateMap.put(currentPoint, outState); //change the state of the current point based on incoming
+        if(outState != blank){ //Doesn't store things that can be generated
+            locationStateMap.put(currentPoint, outState); //change the state of the current point based on incoming
+        }
         incomingDirection = directionOut.get(pointState)[incomingDirection]; //set incoming direction
         
         //change current position
