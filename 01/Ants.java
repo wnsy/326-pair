@@ -61,7 +61,7 @@ class Ants {
             blank = dnaLine.charAt(0);
           }
           i++;
-          if(dnaLine.length() > 1){ //TODO: this assumes all numbers are single digit
+          if(dnaLine.length() == 11){ //TODO: this assumes all numbers are single digit
             firstTemp = dnaLine.charAt(0);
             String temp = dnaLine.substring(2,6); //cardinal directions
             
@@ -83,7 +83,7 @@ class Ants {
               tempCharArray[j] = temp.charAt(j);
             }
             stateChange.put(firstTemp, tempCharArray);
-          } else {
+          } else if(dnaLine.length() < 11){
             //System.out.println("char at 0: " + dnaLine.charAt(0)); //debug
             noSteps = Integer.parseInt(dnaLine.substring(0,1)); //SHOULD HAVE A CATCH METHOD HERE
             //System.out.println("NO STEPS: " + noSteps); //debug
@@ -91,7 +91,10 @@ class Ants {
             System.out.println(walk(noSteps).toString());
 
             scenarioCompleted = true;
-          }
+          } else {
+              System.out.println("Sorry that input is incorrect");
+              System.out.println("Enter DNA lines in the format x NNNN xxxx\n followed by a number up to 10^9");
+                     
         }
       }
     }
