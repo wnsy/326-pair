@@ -1,10 +1,11 @@
 // Java 8
+
 import java.awt.Point;
 import java.util.Scanner;
 import java.util.HashMap;
 
 public class Ants {
-    
+
     static HashMap<Point, Character> locationStateMap = new HashMap<Point, Character>();
     static HashMap<Character, char[]> stateChange = new HashMap<Character, char[]>();
     static HashMap<Character, int[]> directionOut = new HashMap<Character, int[]>();
@@ -28,11 +29,11 @@ public class Ants {
                 char firstTemp;
                 String dnaLine = scan.nextLine();
                 Scanner stepScanner = new Scanner(dnaLine);
-                if(dnaLine.isEmpty() ||  dnaLine.charAt(0) == '#'){){
+                if (dnaLine.isEmpty() || dnaLine.charAt(0) == '#') {
                     System.out.println();
                     break;
-                }        
-                if(dnaLine.charAt(0) == '#'){ //comment line is not repeated
+                }
+                if (dnaLine.charAt(0) == '#') { //comment line is not repeated
                     break; //TODO: comment line currently kills scenario. Needs to just be ignored
                 }
                 System.out.println(dnaLine); //print line when see it
@@ -58,15 +59,14 @@ public class Ants {
                     }
                     directionOut.put(firstTemp, tempIntArray);
                     temp = dnaLine.substring(7, 11);
-                    for (int j = 0; j < 4; j++){
+                    for (int j = 0; j < 4; j++) {
                         tempCharArray[j] = temp.charAt(j);
                     }
                     stateChange.put(firstTemp, tempCharArray);
-                } else if (stepScanner.hasNextInt()) { //less than 11 characters is assumed to be a number
-                    noSteps = Integer.parseInt(dnaLine.substring(0, dnaLine.length())); //SHOULD HAVE A CATCH METHOD HERE
+                } else if (stepScanner.hasNextInt()) {
+                    noSteps = Integer.parseInt(dnaLine.substring(0, dnaLine.length()));
                     Point p = walk(noSteps);
-                    System.out.println("# " + (int) p.x + " " + (int) p.y);
-
+                    System.out.println("# " + p.x + " " + p.y);
                     scenarioCompleted = true;
                 } else { //unexpected input
                     System.out.println("Sorry that input is incorrect");
@@ -83,7 +83,6 @@ public class Ants {
         Point currentPoint = new Point(0, 0); //the location of the current tile
         char outState = blank; //what the tile will change too after being visited
         for (int i = 0; i < noSteps; i++) {
-
             if (locationStateMap.containsKey(currentPoint)) { //determine the state of tile ant is on
                 pointState = locationStateMap.get(currentPoint);
             } else {
@@ -96,7 +95,8 @@ public class Ants {
                 locationStateMap.put(new Point(currentPoint), outState); //change the tile state
             }
 
-          //incomingDirection = directionOut.get(pointState)[incomingDirection]; //set incoming direction based on DNA and direction
+            //set incoming direction based on DNA and direction
+            incomingDirection = directionOut.get(pointState)[incomingDirection];
 
             //change current position
             if (incomingDirection == 0) { //N
@@ -108,7 +108,7 @@ public class Ants {
             } else {
                 currentPoint.x = currentPoint.x - 1; //W = 3
             }
-            incomingDirection = directionOut.get(pointState)[incomingDirection]; //set incoming direction
+            //incomingDirection = directionOut.get(pointState)[incomingDirection]; //set incoming direction
         }
         return currentPoint.getLocation();
     }
