@@ -8,11 +8,27 @@
 
 <ol>
     <h1>Midpoint</h1>
-    <li>Integer overflow</li>
-    <li>How to detect it: </li>
-    <li>How to prevent it: </li>
+    <li>Integer overflow is when we have a number that fits in 32 bits or 64 bits but if we add to it
+        (or multiply it by something, or do another operation), the answer would <em>not fit</em>
+        the original 32 or 64 bits.<p>
+    </li>
+
+
+    <li>How to detect it: In lower-flevel language such as C, the processor does "its best" taking the true result,
+        will then get rid of any bits that don't fit.<p>
+    </li>
+
+
+
+    <li>How to prevent it:
+        use larger integer types in C:<br> <pre>long long int</pre>
+        or in Java: <pre>BigInteger</pre><p>
+    </li>
+
     <li></li>
+
     <li></li>
+
     <li></li>
 
     <h1>Hypotenuse</h1>
@@ -25,6 +41,9 @@
 
 </ol>
 
-
+<h3>Credit: </h3>
+<ul>
+    <li><a href="https://www.interviewcake.com/concept/java/integer-overflow?" target="_blank">01</a> </li>
+</ul>
 </body>
 </html>
