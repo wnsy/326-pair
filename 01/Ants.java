@@ -1,7 +1,7 @@
+// Java 8
 import java.awt.Point;
 import java.util.Scanner;
 import java.util.HashMap;
-import java.util.Map;
 
 public class Ants {
     
@@ -27,8 +27,8 @@ public class Ants {
                 int[] tempIntArray = new int[4];
                 char firstTemp;
                 String dnaLine = scan.nextLine();
-
-                if(dnaLine.isEmpty()){
+                Scanner stepScanner = new Scanner(dnaLine);
+                if(dnaLine.isEmpty() ||  dnaLine.charAt(0) == '#'){){
                     System.out.println();
                     break;
                 }        
@@ -62,11 +62,11 @@ public class Ants {
                         tempCharArray[j] = temp.charAt(j);
                     }
                     stateChange.put(firstTemp, tempCharArray);
-                
-                } else if (dnaLine.length() < 11) { //less than 11 characters is assumed to be a number
+                } else if (stepScanner.hasNextInt()) { //less than 11 characters is assumed to be a number
                     noSteps = Integer.parseInt(dnaLine.substring(0, dnaLine.length())); //SHOULD HAVE A CATCH METHOD HERE
                     Point p = walk(noSteps);
                     System.out.println("# " + (int) p.x + " " + (int) p.y);
+
                     scenarioCompleted = true;
                 } else { //unexpected input
                     System.out.println("Sorry that input is incorrect");
@@ -83,29 +83,33 @@ public class Ants {
         Point currentPoint = new Point(0, 0); //the location of the current tile
         char outState = blank; //what the tile will change too after being visited
         for (int i = 0; i < noSteps; i++) {
-            if (locationStateMap.get(currentPoint) != null) { //determine the state of tile ant is on
+
+            if (locationStateMap.containsKey(currentPoint)) { //determine the state of tile ant is on
                 pointState = locationStateMap.get(currentPoint);
             } else {
                 pointState = blank;
             }
             outState = stateChange.get(pointState)[incomingDirection]; //find new tile state from direction and DNA
+
             locationStateMap.remove(currentPoint);
             if (outState != blank) { //Doesn't store things that can be generated
                 locationStateMap.put(new Point(currentPoint), outState); //change the tile state
             }
-            incomingDirection = directionOut.get(pointState)[incomingDirection]; //set incoming direction based on DNA and direction
+
+          //incomingDirection = directionOut.get(pointState)[incomingDirection]; //set incoming direction based on DNA and direction
 
             //change current position
-            if (incomingDirection == 0) {
-                currentPoint.setLocation(currentPoint.x, currentPoint.y + 1);
-            } else if (incomingDirection == 1) {
-                currentPoint.setLocation(currentPoint.x + 1, currentPoint.y);
-            } else if (incomingDirection == 2) {
-                currentPoint.setLocation(currentPoint.x, currentPoint.y - 1);
+            if (incomingDirection == 0) { //N
+                currentPoint.y = currentPoint.y + 1;
+            } else if (incomingDirection == 1) { //E
+                currentPoint.x = currentPoint.x + 1;
+            } else if (incomingDirection == 2) { //S
+                currentPoint.y = currentPoint.y - 1;
             } else {
-                currentPoint.setLocation(currentPoint.x - 1, currentPoint.y); //W, W = 3
+                currentPoint.x = currentPoint.x - 1; //W = 3
             }
+            incomingDirection = directionOut.get(pointState)[incomingDirection]; //set incoming direction
         }
-        return currentPoint;
+        return currentPoint.getLocation();
     }
 }
