@@ -1,7 +1,7 @@
+// Java 8
 import java.awt.Point;
 import java.util.Scanner;
 import java.util.HashMap;
-import java.util.Map;
 
 public class Ants {
     static HashMap<Point, Character> locationStateMap = new HashMap<Point, Character>();
@@ -12,7 +12,6 @@ public class Ants {
     //SHOULD do some documentation or something
     //yes I agree
     public static void main(String[] args) {
-
         Scanner scan = new Scanner(System.in);
         int i = 0;
         int noSteps = 0;
@@ -29,6 +28,7 @@ public class Ants {
                 int[] tempIntArray = new int[4];
                 char firstTemp;
                 String dnaLine = scan.nextLine();
+                Scanner stepScanner = new Scanner(dnaLine);
                 System.out.println(dnaLine); //print line when see it
                 //System.out.println("length: " + dnaLine.length()); //debug
                 if(dnaLine.isEmpty() || dnaLine.charAt(0) == '#'){
@@ -64,10 +64,10 @@ public class Ants {
                     }
                     System.out.println();
                     stateChange.put(firstTemp, tempCharArray);
-
-                } else if (dnaLine.length() < 11) {
-                    //System.out.println("char at 0: " + dnaLine.charAt(0)); //debug
-                    noSteps = Integer.parseInt(dnaLine.substring(0, dnaLine.length())); //SHOULD HAVE A CATCH METHOD HERE
+                } else if (stepScanner.hasNextInt()) {
+                    System.out.println("char at 0: " + dnaLine.charAt(0)); //debug
+                    System.out.println();
+                    noSteps = Integer.parseInt(dnaLine.substring(0, dnaLine.length())); //SHOULD HAVE A CATCH BLOCK HERE
                     //System.out.println("NO STEPS: " + noSteps); //debug
                     System.out.println("Let's go ant Joe!");
                     System.out.println(walk(noSteps).toString());
@@ -90,8 +90,9 @@ public class Ants {
         int[] directions; //debugs
         for (int i = 0; i < noSteps; i++) {
             System.out.println("incoming direction: " + incomingDirection);
-            System.out.println("@ " + currentPoint.toString() + "noSteps: " + i);
-            if (locationStateMap.get(currentPoint) != null) { //determines current tile state
+            System.out.println("# " + currentPoint.x + " " + currentPoint.y + " noSteps: " + i);
+            if (locationStateMap.containsKey(currentPoint)) { //determines current tile state
+                //another method to look up
                 pointState = locationStateMap.get(currentPoint); //DOUBLE LOOK UP, potential inefficiency
             } else {
                 pointState = blank;
@@ -107,7 +108,7 @@ public class Ants {
         System.out.println();
         */
             outState = stateChange.get(pointState)[incomingDirection]; //determine state change based on incoming
-            //System.out.println("out: " + outState);
+            System.out.println("out: " + outState);
             locationStateMap.remove(currentPoint);
             if (outState != blank) { //Doesn't store things that can be generated
                 locationStateMap.put(currentPoint, outState); //change the state of the current point based on incoming
@@ -119,19 +120,20 @@ public class Ants {
                 System.out.print(a);
             }
             System.out.println(); //debug
-            incomingDirection = directionOut.get(pointState)[incomingDirection]; //set incoming direction
 
             //change current position
-            if (incomingDirection == 0) {
-                currentPoint.setLocation(currentPoint.getX(), currentPoint.getY() + 1);
-            } else if (incomingDirection == 1) {
-                currentPoint.setLocation(currentPoint.getX() + 1, currentPoint.getY());
-            } else if (incomingDirection == 2) {
-                currentPoint.setLocation(currentPoint.getX(), currentPoint.getY() - 1);
+            if (incomingDirection == 0) { //N
+                currentPoint.y = currentPoint.y + 1;
+            } else if (incomingDirection == 1) { //E
+                currentPoint.x = currentPoint.x + 1;
+            } else if (incomingDirection == 2) { //S
+                currentPoint.y = currentPoint.y - 1;
             } else {
-                currentPoint.setLocation(currentPoint.getX() - 1, currentPoint.getY()); //W, W = 3
+                currentPoint.x = currentPoint.x - 1; //W = 3
             }
+            incomingDirection = directionOut.get(pointState)[incomingDirection]; //set incoming direction
+
         }
-        return currentPoint;
+        return currentPoint.getLocation();
     }
 }
