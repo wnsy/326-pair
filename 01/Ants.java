@@ -1,17 +1,33 @@
-// Java 8
+//Java 8
 
 import java.awt.Point;
 import java.util.Scanner;
 import java.util.HashMap;
 
+/**
+ *  Langton's ant simulation
+ *
+ */
 public class Ants {
 
+    /**
+     * locationStateMap stores the position of the ant and the its state
+     * stateChange stores the current state and the changed state
+     * directionOut stores the state of the ant and its index direction (NSEW)
+     */
     static HashMap<Point, Character> locationStateMap = new HashMap<Point, Character>();
     static HashMap<Character, char[]> stateChange = new HashMap<Character, char[]>();
     static HashMap<Character, int[]> directionOut = new HashMap<Character, int[]>();
     private static char blank;
 
-    //still should do some documentation or something
+
+    /**
+     * Reads input from stdin and prints output.
+     * Main method checking if the scenario has been completed, and check if there are rules in the
+     * map. If there is no rules, user input will be saved to the map.
+     *
+     * @param args Command line arguments are not used
+     */
     public static void main(String[] args) {
         Scanner scan = new Scanner(System.in);
         int i = 0;
@@ -29,14 +45,15 @@ public class Ants {
                 char firstTemp;
                 String dnaLine = scan.nextLine();
                 Scanner stepScanner = new Scanner(dnaLine);
-                if (dnaLine.isEmpty() || dnaLine.charAt(0) == '#') {
+                if (dnaLine.isEmpty()) {
                     System.out.println();
                     break;
                 }
                 if (dnaLine.charAt(0) == '#') { //comment line is not repeated
-                    break; //TODO: comment line currently kills scenario. Needs to just be ignored
+                    break; //needs to just be ignored
                 }
                 System.out.println(dnaLine); //print line when see it
+
                 if (i == 0) {
                     blank = dnaLine.charAt(0); //first char of first DNA line is taken as the default tile state
                 }
@@ -45,7 +62,8 @@ public class Ants {
                     firstTemp = dnaLine.charAt(0);
                     String temp = dnaLine.substring(2, 6); //parse the cardinal directions
 
-                    for (int j = 0; j < 4; j++) { // N = 0, E = 1, S = 2, W = 3 this makes indexing into DNA arrays easier
+                    // N = 0, E = 1, S = 2, W = 3 this makes indexing into DNA arrays easier
+                    for (int j = 0; j < 4; j++) {
                         char direction = temp.charAt(j);
                         if (direction == 'N') {
                             tempIntArray[j] = 0;
@@ -57,13 +75,16 @@ public class Ants {
                             tempIntArray[j] = 3; //West
                         }
                     }
+
                     directionOut.put(firstTemp, tempIntArray);
                     temp = dnaLine.substring(7, 11);
                     for (int j = 0; j < 4; j++) {
                         tempCharArray[j] = temp.charAt(j);
                     }
+
                     stateChange.put(firstTemp, tempCharArray);
-                } else if (stepScanner.hasNextInt()) {
+
+                } else if (stepScanner.hasNextInt()) { //Scans for steps
                     noSteps = Integer.parseInt(dnaLine.substring(0, dnaLine.length()));
                     Point p = walk(noSteps);
                     System.out.println("# " + p.x + " " + p.y);
@@ -77,6 +98,13 @@ public class Ants {
         }
     }
 
+
+    /**
+     * Walk method for the ant, and check if the rules exist in the map.
+     * Changes the current direction of the ant
+     * @param noSteps the number of steps of the ant
+     * @return currentPoint of the ant (x, y)
+     */
     private static Point walk(int noSteps) {
         int incomingDirection = 0; //0 = N, 1 = E, 2 = S, 3 = W
         char pointState = blank; //state of current tile
